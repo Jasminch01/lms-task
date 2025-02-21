@@ -1,9 +1,9 @@
 export type Tcourse = {
-  id: number;
-  name: string;
-  image: string;
-  duration: string;
-  batch: string;
+  _id : string;
+  thumbnail: string;
+  title: string;
+  price: string;
+  description: string;
 };
 
 export type TcourseProps = {

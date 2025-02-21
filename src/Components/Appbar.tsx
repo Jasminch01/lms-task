@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -16,7 +16,7 @@ export default function AppBar() {
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="text-xl font-bold ">
-              TechLearn
+              TechStack
             </Link>
           </div>
 
@@ -58,15 +58,15 @@ export default function AppBar() {
             <Link href="/" className="">
               Home
             </Link>
-            <a href="/courses" className="">
+            <Link href="/courses" className="">
               Courses
-            </a>
-            <a href="/about" className="">
+            </Link>
+            <Link href="#about" className="">
               About
-            </a>
-            <a href="/contact" className="">
-              Contact
-            </a>
+            </Link>
+            <Link href="/login" className="">
+              Login
+            </Link>
           </div>
         </div>
       </div>
@@ -75,27 +75,18 @@ export default function AppBar() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link href="/" className="block text-gray-800 hover:text-gray-600">
+            <Link href="/" className="block text-white text-center">
               Home
             </Link>
-            <a
-              href="/courses"
-              className="block text-gray-800 hover:text-gray-600"
-            >
+            <Link href="/courses" className="block text-white text-center">
               Courses
-            </a>
-            <a
-              href="/about"
-              className="block text-gray-800 hover:text-gray-600"
-            >
+            </Link>
+            <Link href="#about" className="block text-white text-center">
               About
-            </a>
-            <a
-              href="/contact"
-              className="block text-gray-800 hover:text-gray-600"
-            >
-              Contact
-            </a>
+            </Link>
+            <Link href="/login" className="block text-white text-center">
+              Login
+            </Link>
           </div>
         </div>
       )}
