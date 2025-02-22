@@ -1,13 +1,17 @@
 "use client";
+import useCurrentUser from "@/utls/UsecurrentUser";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function AppBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { currentUser, logoutUser } = useCurrentUser();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  console.log(currentUser);
 
   return (
     <nav className="bg-[#2563EB] shadow-md text-white">
@@ -64,9 +68,13 @@ export default function AppBar() {
             <Link href="#about" className="">
               About
             </Link>
-            <Link href="/login" className="">
-              Login
-            </Link>
+            {currentUser ? (
+              <button onClick={logoutUser}>Logout</button>
+            ) : (
+              <Link href="/login" className="">
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>

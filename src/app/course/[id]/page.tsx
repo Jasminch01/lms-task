@@ -6,7 +6,13 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const CourseDetailsPage = () => {
-  const [course, Setcourse] = useState<Tcourse>({});
+  const [course, Setcourse] = useState<Tcourse>({
+    _id: "",
+    title: "",
+    description: "",
+    price: "",
+    thumbnail : ''
+  });
   const { id } = useParams();
   console.log(id);
   useEffect(() => {
@@ -27,7 +33,7 @@ const CourseDetailsPage = () => {
   }, [id]);
 
   console.log(course);
-  const { thumbnail, title, price, description } = course;
+  const { title, price, description } = course;
 
   return (
     <div className="max-w-6xl mx-auto py-20 bg-white">

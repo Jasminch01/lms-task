@@ -1,11 +1,18 @@
 "use client";
+import useCurrentUser from "@/utls/UsecurrentUser";
 import axios from "axios";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  const { userData } = useCurrentUser();
+
   const userLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const crediential = {
@@ -22,7 +29,13 @@ const LoginPage = () => {
             withCredentials: true,
           }
         );
-        console.log(res.data);
+        const user = res.data.data;
+        userData(user);
+
+        if (callbackUrl) {
+          router.push(callbackUrl as string);
+        }
+        router.push("/");
       } catch (error) {
         console.log(error);
       }
