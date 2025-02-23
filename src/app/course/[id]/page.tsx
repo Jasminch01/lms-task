@@ -2,6 +2,7 @@
 import { Tcourse } from "@/types/type";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -44,9 +45,11 @@ const CourseDetailsPage = () => {
           </h1>
           <p className="text-gray-600 leading-relaxed">{description}</p>
           <div className="flex items-center space-x-5">
+            <Link href={`/lecture/${course._id}`}>
             <button className="py-2 px-5 bg-[#2563EB] text-white rounded">
               Enroll Now
             </button>
+            </Link>
             <div className="flex items-center flex-col md:flex-row space-x-3">
               <p className="text-2xl font-semibold">$ {price}</p>
               <p>use promo</p>
