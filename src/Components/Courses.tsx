@@ -21,7 +21,7 @@ export default function Courses() {
 
   console.log(courses);
   return (
-    <div className="py-20">
+    <div className="py-20" id="#courses">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center py-10">
           <p className="font-bold text-4xl text-center">All Courses</p>

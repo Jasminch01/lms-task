@@ -1,9 +1,12 @@
+import CourseUpload from '@/Components/CourseForm';
+import Courses from '@/Components/Courses';
 import React from 'react';
 
 const DashBoardpage = () => {
     return (
         <div>
-           <p>this is admin dashboard</p> 
+           <CourseUpload/>
+           <Courses/>
         </div>
     );
 };

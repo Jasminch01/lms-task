@@ -1,59 +1,67 @@
 "use client";
-import useCurrentUser from "@/utls/UsecurrentUser";
 import axios from "axios";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
-  const { userData } = useCurrentUser();
 
-  const userLogin = async (e: React.FormEvent) => {
+  const userRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    const credentials = {
+    const userData = {
+      name,
       email,
       password,
     };
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/user/signin",
-        credentials,
-        {
-          withCredentials: true,
+    const registerUser = async () => {
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/user/signup",
+          userData,
+          {
+            withCredentials: true,
+          }
+        );
+        if (res.status === 201) {
+          router.push("/login");
         }
-      );
-      const user = res.data.data;
-      userData(user); // Update currentUser state immediately
-
-      // Redirect after successful login
-      if (callbackUrl) {
-        router.push(callbackUrl);
-      } else {
-        router.push("/");
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+    registerUser();
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Login to Your Account
+          Create Your Account
         </h2>
-        <form className="space-y-6" onSubmit={userLogin}>
+        <form className="space-y-6" onSubmit={userRegister}>
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
           <div>
             <label
               htmlFor="email"
@@ -93,21 +101,15 @@ const LoginPage = () => {
           <div>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              disabled={isLoading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {isLoading ? "Loading..." : "Login"}
+              Register
             </button>
           </div>
-          <div className="text-center">
-            <Link href="#" className="text-sm text-blue-600 hover:underline">
-              Forgot Password?
-            </Link>
-          </div>
           <div className="text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-blue-600 hover:underline">
-              Register here
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-600 hover:underline">
+              Login here
             </Link>
           </div>
         </form>
@@ -116,4 +118,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
