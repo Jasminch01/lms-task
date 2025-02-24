@@ -23,7 +23,7 @@ const ModuleLectureManagement = () => {
   const [editedModuleId, setEditedModuleId] = useState("");
   const [editingLecture, setEditingLecture] = useState<Tlecture | null>(null);
   const { id } = useParams();
-
+console.log(lectures)
   useEffect(() => {
     const fetchAllLectures = async () => {
       try {

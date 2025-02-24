@@ -2,13 +2,14 @@
 import { logoutUser } from "@/utls";
 import useCurrentUser from "@/utls/UsecurrentUser";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AppBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser, loading } = useCurrentUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const router = useRouter();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -19,6 +20,7 @@ export default function AppBar() {
 
   const handleLogout = () => {
     logoutUser();
+    router.push('/')
   };
 
   return (
