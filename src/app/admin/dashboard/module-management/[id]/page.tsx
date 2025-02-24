@@ -16,8 +16,12 @@ const ModuleLectureManagement = () => {
   const [videoUrl, setVideoUrl] = useState("");
   const [pdfFiles, setPdfFiles] = useState<FileList | null>(null);
   const [pdfUrls, setPdfUrls] = useState<string[]>([]);
-  const { id } = useParams();
 
+  const [editMode, setEditMode] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [moduleTitle, setModuleTitle] = useState("");
+  const [editedModuleId, setEditedModuleId] = useState("");
+  const { id } = useParams();
   useEffect(() => {
     const fetchAllLectures = async () => {
       try {
@@ -32,7 +36,6 @@ const ModuleLectureManagement = () => {
     fetchAllLectures();
 
     // get all modules by course
-
     const fetchModules = async () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/modules/${id}`, {
@@ -108,7 +111,7 @@ const ModuleLectureManagement = () => {
         );
 
         const isAdded = res.data.data;
-        console.log(isAdded)
+        console.log(isAdded);
         if (isAdded) {
           setSelectedModule("");
           setLectureTitle("");
@@ -150,28 +153,169 @@ const ModuleLectureManagement = () => {
     return uploadedUrls;
   };
 
+  const handleEdit = () => {
+    if (selectedModule) {
+      const moduleToEdit = modules.find((mod) => mod._id === selectedModule);
+      if (moduleToEdit) {
+        setEditedTitle(moduleToEdit.title);
+        setEditedModuleId(moduleToEdit._id);
+        setEditMode(true);
+      } else {
+        console.error("Module not found");
+      }
+    }
+  };
+
+  const handleUpdate = () => {
+    // update operation
+
+    const updateModule = async () => {
+      try {
+        const res = await axios.put(
+          `http://localhost:5000/api/modules/${editedModuleId}`,
+          { editedTitle },
+          {
+            withCredentials: true,
+          }
+        );
+        const update = res.data.data;
+
+        if (update) {
+          alert("module updated success");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    updateModule();
+
+    setEditMode(false);
+  };
+
+  const handleDelete = () => {
+    const updateModule = async () => {
+      try {
+        const res = await axios.delete(
+          `http://localhost:5000/api/modules/${selectedModule}`,
+          {
+            withCredentials: true,
+          }
+        );
+        const update = res.data.data;
+
+        if (update) {
+          alert("module deleted success");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    updateModule();
+  };
+
+  const handleAddModule = () => {
+    const updateModule = async () => {
+      try {
+        const res = await axios.post(
+          `http://localhost:5000/api/modules/create`,
+          { courseId: id, title: moduleTitle },
+          {
+            withCredentials: true,
+          }
+        );
+        const update = res.data.data;
+
+        if (update) {
+          alert("module added success");
+          setModuleTitle("");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    updateModule();
+  };
+
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8 text-center">
+    <div className="p-4 md:p-8 bg-gray-100 min-h-screen">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">
         Module & Lecture Management
       </h1>
-      <div className="max-w-7xl mx-auto">
+      <hr />
+
+      <div className="max-w-7xl mx-auto mt-10">
         <h2 className="text-xl font-bold mb-4 text-center">Add Module</h2>
-        <div className="mb-8 flex justify-center">
-          <input
-            type="text"
-            placeholder="Module Title"
-            className="p-2 border rounded mr-2"
-          />
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">
-            Add Module
-          </button>
+        <div className="mb-8 flex flex-col md:flex-row justify-center gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
+            <input
+              type="text"
+              placeholder="Module Title"
+              value={moduleTitle}
+              className="p-2 border rounded w-full md:w-auto"
+              onChange={(e) => setModuleTitle(e.target.value)}
+            />
+            <button
+              onClick={handleAddModule}
+              className="bg-green-500 text-white px-4 py-2 rounded w-full md:w-auto"
+            >
+              Add Module
+            </button>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-2 items-center">
+            <select
+              className="p-2 border rounded w-full md:w-auto"
+              onChange={(e) => setSelectedModule(e.target.value)}
+              required
+            >
+              <option value="">Select Module</option>
+              {modules.map((mod) => (
+                <option key={mod._id} value={mod._id}>
+                  {mod.title}
+                </option>
+              ))}
+            </select>
+            <div className="flex flex-col md:flex-row gap-2 w-full">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded w-full md:w-auto"
+                onClick={handleDelete}
+              >
+                Delete Module
+              </button>
+              {editMode ? (
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto"
+                  onClick={() => handleUpdate()}
+                >
+                  Update
+                </button>
+              ) : (
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded w-full md:w-auto"
+                  onClick={handleEdit}
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+            {editMode && (
+              <input
+                type="text"
+                value={editedTitle}
+                onChange={(e) => setEditedTitle(e.target.value)}
+                className="p-2 border rounded w-full md:w-auto"
+              />
+            )}
+          </div>
         </div>
 
         <h2 className="text-xl font-bold mb-4 text-center">Add Lecture</h2>
-        <form onSubmit={handleSubmit} className="mb-8 flex justify-center">
+        <form
+          onSubmit={handleSubmit}
+          className="mb-8 flex flex-col md:flex-row md:justify-center gap-3"
+        >
           <select
-            className="p-2 border rounded mr-2"
+            className="p-2 border rounded w-full md:w-auto"
             onChange={(e) => setSelectedModule(e.target.value)}
             required
           >
@@ -182,30 +326,34 @@ const ModuleLectureManagement = () => {
               </option>
             ))}
           </select>
+
           <input
             type="text"
             placeholder="Lecture Title"
-            className="p-2 border rounded mr-2"
+            className="p-2 border rounded w-full md:w-auto"
             required
             onChange={(e) => setLectureTitle(e.target.value)}
           />
+
           <input
             type="text"
             placeholder="Video URL"
-            className="p-2 border rounded mr-2"
+            className="p-2 border rounded w-full md:w-auto"
             onChange={(e) => setVideoUrl(e.target.value)}
             required
           />
+
           <input
             type="file"
             multiple
             accept="application/pdf"
-            className="p-2 border rounded mr-2"
+            className="p-2 border rounded w-full md:w-auto"
             onChange={(e) => setPdfFiles(e.target.files)}
           />
+
           <button
             type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded"
+            className="bg-green-500 text-white px-4 py-2 rounded w-full md:w-auto"
           >
             Add Lecture
           </button>
@@ -214,79 +362,81 @@ const ModuleLectureManagement = () => {
         {/* Filter lecture */}
         <div className="mb-8 text-center">
           <h2 className="text-xl font-bold mb-4">Filter Lectures</h2>
-          <div className="flex gap-4 mb-4 justify-center">
+          <div className="flex flex-col md:flex-row gap-4 mb-4 justify-center">
             <input
               type="text"
               placeholder="Filter by Course"
-              className="p-2 border rounded"
+              className="p-2 border rounded w-full md:w-auto"
               value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
             />
             <input
               type="text"
               placeholder="Filter by Module"
-              className="p-2 border rounded"
+              className="p-2 border rounded w-full md:w-auto"
               value={moduleName}
               onChange={(e) => setModuleName(e.target.value)}
             />
-            <button onClick={filteredLectures}>
-              <TiFilter className="text-3xl font-bold" />
+            <button onClick={filteredLectures} className="w-full md:w-auto">
+              <TiFilter className="text-3xl font-bold mx-auto" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Lecture Table */}
-      <div className="mb-8 py-20">
+      <div className="mb-8 py-10">
         <h2 className="text-xl font-bold mb-4">Lecture List</h2>
-        <table className="w-full bg-white border rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="p-2">Title</th>
-              <th className="p-2">Video URL</th>
-              <th className="p-2">PDF Notes</th>
-              <th className="p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lectures.map((lec) => (
-              <tr key={lec._id} className="border-b">
-                <td className="p-2">{lec.title}</td>
-                <td className="p-2">
-                  <a
-                    href={lec.videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    Watch Video
-                  </a>
-                </td>
-                <td className="p-2">
-                  {lec.pdfNotes.map((pdf, pdfIndex) => (
+        <div className="overflow-x-auto">
+          <table className="w-full bg-white border rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="p-2">Title</th>
+                <th className="p-2">Video URL</th>
+                <th className="p-2">PDF Notes</th>
+                <th className="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lectures.map((lec) => (
+                <tr key={lec._id} className="border-b">
+                  <td className="p-2">{lec.title}</td>
+                  <td className="p-2">
                     <a
-                      key={pdfIndex}
-                      href={pdf} // Assuming pdf contains the URL
+                      href={lec.videoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline block"
+                      className="text-blue-500 hover:underline"
                     >
-                      PDF {pdfIndex + 1}
+                      Watch Video
                     </a>
-                  ))}
-                </td>
-                <td className="p-2 flex items-center gap-5">
-                  <button className="bg-red-500 text-white px-2 py-1 rounded">
-                    Delete
-                  </button>
-                  <button className="bg-green-500 text-white px-4 py-1 rounded">
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                  <td className="p-2">
+                    {lec.pdfNotes.map((pdf, pdfIndex) => (
+                      <a
+                        key={pdfIndex}
+                        href={pdf} // Assuming pdf contains the URL
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline block"
+                      >
+                        PDF {pdfIndex + 1}
+                      </a>
+                    ))}
+                  </td>
+                  <td className="p-2 flex items-center gap-2 md:gap-5">
+                    <button className="bg-red-500 text-white px-2 py-1 rounded text-sm md:text-base">
+                      Delete
+                    </button>
+                    <button className="bg-green-500 text-white px-2 py-1 rounded text-sm md:text-base">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
