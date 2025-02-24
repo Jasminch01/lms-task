@@ -36,26 +36,6 @@ const CourseUpload = () => {
     }
   };
   
-
-  // const uploadImageToImageBB = async (image: File) => {
-  //   const formData = new FormData();
-  //   formData.append("image", image);
-
-  //   try {
-  //     const response = await axios.post(
-  //       `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_BB_API_KEY}`,
-  //       formData, {
-  //         withCredentials : true
-  //       }
-  //     );
-
-  //     return response.data.data.url;
-  //   } catch (error) {
-  //     console.error("Error uploading image to ImageBB:", error);
-  //     throw new Error("Image upload failed");
-  //   }
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
