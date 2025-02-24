@@ -1,17 +1,28 @@
 "use client";
+
 import axios from "axios";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react"; // Import Suspense
 import Cookies from "js-cookie";
 
+// Wrap the component in Suspense
 const LoginPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
+};
+
+// Move the main logic to a separate component
+const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams.get("callbackUrl") || "/"; // Fallback to "/"
 
   const userLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,13 +46,10 @@ const LoginPage = () => {
         Cookies.set("currentUser", JSON.stringify(user), { expires: 1 });
       }
       // Redirect after successful login
-      if (callbackUrl) {
-        router.push(callbackUrl);
-      } else {
-        router.push("/");
-      }
+      router.push(callbackUrl);
     } catch (error) {
-      console.log(error);
+      console.error("Login failed:", error);
+      alert("Login failed. Please check your credentials and try again.");
     } finally {
       setIsLoading(false);
     }
