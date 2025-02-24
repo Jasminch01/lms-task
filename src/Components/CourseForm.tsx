@@ -6,12 +6,12 @@ import { useState } from "react";
 
 const CourseUpload = () => {
   const [title, setTitle] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const {currentUser} = useCurrentUser()
+  const { currentUser } = useCurrentUser();
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -28,14 +28,14 @@ const CourseUpload = () => {
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData
       );
-  
+
       return response.data.secure_url; // Return the image URL
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
       throw new Error("Image upload failed");
     }
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -59,19 +59,21 @@ const CourseUpload = () => {
           price,
           description,
           thumbnail: imageUrl, // Send the ImageBB URL instead of the file
-          authorId : currentUser?._id
-        }, {
-          withCredentials : true
-        } 
+          authorId: currentUser?._id,
+        },
+        {
+          withCredentials: true,
+        }
       );
 
-      if (response.status === 201) {
-        alert("Course uploaded successfully!");
+      if (response.data.data) {
         // Reset form
         setTitle("");
-        setPrice(0);
+        setPrice("");
         setDescription("");
         setThumbnail(null);
+        alert("Course uploaded successfully!");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error uploading course:", error);
@@ -136,10 +138,9 @@ const CourseUpload = () => {
               Price
             </label>
             <input
-              type="number"
               id="price"
               value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
+              onChange={(e) => setPrice(e.target.value)}
               placeholder="Enter course price"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required

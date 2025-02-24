@@ -1,11 +1,12 @@
 "use client";
+import { logoutUser } from "@/utls";
 import useCurrentUser from "@/utls/UsecurrentUser";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function AppBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { currentUser, logoutUser, loading } = useCurrentUser();
+  const { currentUser, loading } = useCurrentUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -18,8 +19,6 @@ export default function AppBar() {
 
   const handleLogout = () => {
     logoutUser();
-    setDropdownOpen(false);
-    closeMenu();
   };
 
   return (
@@ -102,7 +101,7 @@ export default function AppBar() {
 
                     {currentUser.role === "admin" && (
                       <Link
-                        href="/dashboard"
+                        href="admin/dashboard"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
                       >
                         Dashboard
@@ -174,7 +173,7 @@ export default function AppBar() {
 
                     {currentUser.role === "admin" && (
                       <Link
-                        href="/dashboard"
+                        href="admin/dashboard"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
                         onClick={closeMenu}
                       >

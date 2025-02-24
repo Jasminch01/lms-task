@@ -1,9 +1,9 @@
 "use client";
-import useCurrentUser from "@/utls/UsecurrentUser";
 import axios from "axios";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
@@ -12,7 +12,6 @@ const LoginPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  const { userData } = useCurrentUser();
 
   const userLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +31,9 @@ const LoginPage = () => {
         }
       );
       const user = res.data.data;
-      userData(user); // Update currentUser state immediately
-
+      if (user) {
+        Cookies.set("currentUser", JSON.stringify(user), { expires: 1 });
+      }
       // Redirect after successful login
       if (callbackUrl) {
         router.push(callbackUrl);

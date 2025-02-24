@@ -21,7 +21,9 @@ const ModuleLectureManagement = () => {
   const [editedTitle, setEditedTitle] = useState("");
   const [moduleTitle, setModuleTitle] = useState("");
   const [editedModuleId, setEditedModuleId] = useState("");
+  const [editingLecture, setEditingLecture] = useState<Tlecture | null>(null);
   const { id } = useParams();
+
   useEffect(() => {
     const fetchAllLectures = async () => {
       try {
@@ -236,6 +238,66 @@ const ModuleLectureManagement = () => {
     updateModule();
   };
 
+  const handleDeleteLecture = async (lectureId: string) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:5000/api/lectures?id=${lectureId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const isDeleted = res.data.data;
+      if (isDeleted) {
+        setLectures(lectures.filter((lec) => lec._id !== lectureId));
+        alert("Lecture deleted successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEditLecture = (lecture: Tlecture) => {
+    setEditingLecture(lecture);
+    setLectureTitle(lecture.title);
+    setVideoUrl(lecture.videoUrl);
+    setPdfUrls(lecture.pdfNotes);
+  };
+
+  const handleUpdateLecture = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!editingLecture) return;
+
+    const updatedLectureData = {
+      title: lectureTitle,
+      videoUrl,
+      pdfNotes: pdfUrls,
+    };
+
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/lectures?id=${editingLecture._id}`,
+        updatedLectureData,
+        { withCredentials: true }
+      );
+      const isUpdated = res.data.data;
+      if (isUpdated) {
+        setLectures(
+          lectures.map((lec) =>
+            lec._id === editingLecture._id ? { ...lec, ...updatedLectureData } : lec
+          )
+        );
+        setEditingLecture(null);
+        setLectureTitle("");
+        setVideoUrl("");
+        setPdfUrls([]);
+        alert("Lecture updated successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="p-4 md:p-8 bg-gray-100 min-h-screen">
       <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">
@@ -425,10 +487,16 @@ const ModuleLectureManagement = () => {
                     ))}
                   </td>
                   <td className="p-2 flex items-center gap-2 md:gap-5">
-                    <button className="bg-red-500 text-white px-2 py-1 rounded text-sm md:text-base">
+                    <button
+                      className="bg-red-500 text-white px-2 py-1 rounded text-sm md:text-base"
+                      onClick={() => handleDeleteLecture(lec._id)}
+                    >
                       Delete
                     </button>
-                    <button className="bg-green-500 text-white px-2 py-1 rounded text-sm md:text-base">
+                    <button
+                      className="bg-green-500 text-white px-2 py-1 rounded text-sm md:text-base"
+                      onClick={() => handleEditLecture(lec)}
+                    >
                       Edit
                     </button>
                   </td>
@@ -438,6 +506,55 @@ const ModuleLectureManagement = () => {
           </table>
         </div>
       </div>
+
+      {/* Edit Lecture Modal */}
+      {editingLecture && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Edit Lecture</h2>
+            <form onSubmit={handleUpdateLecture}>
+              <input
+                type="text"
+                placeholder="Lecture Title"
+                value={lectureTitle}
+                onChange={(e) => setLectureTitle(e.target.value)}
+                className="p-2 border rounded w-full mb-4"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Video URL"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                className="p-2 border rounded w-full mb-4"
+                required
+              />
+              <input
+                type="file"
+                multiple
+                accept="application/pdf"
+                onChange={(e) => setPdfFiles(e.target.files)}
+                className="p-2 border rounded w-full mb-4"
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingLecture(null)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
