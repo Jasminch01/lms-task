@@ -40,7 +40,7 @@ const Course = ({ course }: TcourseProps) => {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/courses?courseId=${course._id}`,
+        `https://lms-task-server.onrender.com/api/courses?courseId=${course._id}`,
         editedCourse,
         {
           withCredentials: true,
@@ -59,7 +59,7 @@ const Course = ({ course }: TcourseProps) => {
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/courses?courseId=${course._id}`,
+        `https://lms-task-server.onrender.com/api/courses?courseId=${course._id}`,
         {
           withCredentials: true,
         }

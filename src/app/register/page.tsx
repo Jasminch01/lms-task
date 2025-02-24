@@ -21,7 +21,7 @@ const RegisterPage = () => {
     const registerUser = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:5000/api/user/signup",
+          "https://lms-task-server.onrender.com/api/user/signup",
           userData,
           {
             withCredentials: true,

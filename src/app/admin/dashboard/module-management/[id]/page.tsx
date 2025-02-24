@@ -27,7 +27,7 @@ const ModuleLectureManagement = () => {
   useEffect(() => {
     const fetchAllLectures = async () => {
       try {
-        const res = await axios("http://localhost:5000/api/lectures", {
+        const res = await axios("https://lms-task-server.onrender.com/api/lectures", {
           withCredentials: true,
         });
         setLectures(res.data.data);
@@ -40,7 +40,7 @@ const ModuleLectureManagement = () => {
     // get all modules by course
     const fetchModules = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/modules/${id}`, {
+        const res = await axios.get(`https://lms-task-server.onrender.com/api/modules/${id}`, {
           withCredentials: true,
         });
         setModules(res.data.data);
@@ -60,7 +60,7 @@ const ModuleLectureManagement = () => {
     const fetchLecturesWithCourseModuleName = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:5000/api/lectures",
+          "https://lms-task-server.onrender.com/api/lectures",
           courseFilter,
           {
             withCredentials: true,
@@ -107,7 +107,7 @@ const ModuleLectureManagement = () => {
     const addLecture = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:5000/api/lectures/create",
+          "https://lms-task-server.onrender.com/api/lectures/create",
           lectureData,
           { withCredentials: true }
         );
@@ -174,7 +174,7 @@ const ModuleLectureManagement = () => {
     const updateModule = async () => {
       try {
         const res = await axios.put(
-          `http://localhost:5000/api/modules/${editedModuleId}`,
+          `https://lms-task-server.onrender.com/api/modules/${editedModuleId}`,
           { editedTitle },
           {
             withCredentials: true,
@@ -198,7 +198,7 @@ const ModuleLectureManagement = () => {
     const updateModule = async () => {
       try {
         const res = await axios.delete(
-          `http://localhost:5000/api/modules/${selectedModule}`,
+          `https://lms-task-server.onrender.com/api/modules/${selectedModule}`,
           {
             withCredentials: true,
           }
@@ -219,7 +219,7 @@ const ModuleLectureManagement = () => {
     const updateModule = async () => {
       try {
         const res = await axios.post(
-          `http://localhost:5000/api/modules/create`,
+          `https://lms-task-server.onrender.com/api/modules/create`,
           { courseId: id, title: moduleTitle },
           {
             withCredentials: true,
@@ -241,7 +241,7 @@ const ModuleLectureManagement = () => {
   const handleDeleteLecture = async (lectureId: string) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/lectures?id=${lectureId}`,
+        `https://lms-task-server.onrender.com/api/lectures?id=${lectureId}`,
         {
           withCredentials: true,
         }
@@ -276,7 +276,7 @@ const ModuleLectureManagement = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/lectures?id=${editingLecture._id}`,
+        `https://lms-task-server.onrender.com/api/lectures?id=${editingLecture._id}`,
         updatedLectureData,
         { withCredentials: true }
       );

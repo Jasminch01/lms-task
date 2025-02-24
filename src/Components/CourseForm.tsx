@@ -53,7 +53,7 @@ const CourseUpload = () => {
 
       // Send course details to the server
       const response = await axios.post(
-        "http://localhost:5000/api/course/create",
+        "https://lms-task-server.onrender.com/api/course/create",
         {
           title,
           price,
