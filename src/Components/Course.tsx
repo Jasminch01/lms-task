@@ -21,20 +21,17 @@ const Course = ({ course }: TcourseProps) => {
     // isLoading,
     // refetch,
   } = useCurrentUser(userEmail || "");
-  const editRef = useRef<HTMLDivElement>(null); // Ref for the editable area
-console.log(currentUser)
-  // Handle clicks outside the editable area
+  const editRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (editRef.current && !editRef.current.contains(event.target as Node)) {
-        setIsEditing(false); // Close edit mode
+        setIsEditing(false);
       }
     };
 
-    // Attach the event listener
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup the event listener
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };

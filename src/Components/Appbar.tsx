@@ -16,17 +16,8 @@ export default function AppBar() {
   const userEmail = user?.emailAddresses[0].emailAddress;
 
   // Fetch current user data
-  const {
-    data: currentUser,
-    // isLoading,
-    // refetch,
-  } = useCurrentUser(userEmail || "");
-  // if (user) {
-  //   refetch();
-  // }
+  const { data: currentUser } = useCurrentUser(userEmail || "");
   // Sign up a new user
-
-  console.log(currentUser)
   const { mutate: signUpUser } = useSignUpUser();
   useEffect(() => {
     if (!user) return;
@@ -36,10 +27,10 @@ export default function AppBar() {
       email: user.emailAddresses[0].emailAddress || "",
     };
 
-    // Trigger sign-up mutation
     signUpUser(newUser, {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onSuccess: (data) => {
-        console.log("User signed up:", data);
+        // console.log("User signed up:", data);
       },
       onError: (error) => {
         console.error("Sign-up error:", error);

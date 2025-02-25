@@ -15,6 +15,7 @@ export type Tuser = {
 };
 
 export interface Tlecture {
+  courseId: string;
   _id: string;
   moduleId: string;
   title: string;
