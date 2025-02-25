@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
-import { useCurrentUser } from "@/utls/UsecurrentUser";
+import useCurrentUser from "@/utls/UsecurrentUser";
 
 const Course = ({ course }: TcourseProps) => {
   const [isEditing, setIsEditing] = useState(false);

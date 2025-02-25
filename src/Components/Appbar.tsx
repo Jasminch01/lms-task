@@ -1,6 +1,7 @@
 "use client";
 import { clearCookies } from "@/utls";
-import { useCurrentUser, useSignUpUser } from "@/utls/UsecurrentUser";
+import useCurrentUser from "@/utls/UsecurrentUser";
+import { useSignUpUser } from "@/utls/useSignupUser";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
