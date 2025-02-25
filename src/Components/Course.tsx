@@ -1,19 +1,26 @@
 import { TcourseProps } from "@/types/type";
-import useCurrentUser from "@/utls/UsecurrentUser";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+import { useCurrentUser } from "@/utls/UsecurrentUser";
 
 const Course = ({ course }: TcourseProps) => {
-  const { currentUser } = useCurrentUser();
   const [isEditing, setIsEditing] = useState(false);
+  const { user } = useUser();
+  const userEmail = user?.emailAddresses[0].emailAddress;
   const [editedCourse, setEditedCourse] = useState({
     title: course.title,
     description: course.description,
     price: course.price,
   });
 
+  const {
+    data: currentUser,
+    // isLoading,
+    // refetch,
+  } = useCurrentUser(userEmail || "");
   const editRef = useRef<HTMLDivElement>(null); // Ref for the editable area
 
   // Handle clicks outside the editable area
@@ -163,9 +170,7 @@ const Course = ({ course }: TcourseProps) => {
 
               <div>
                 <Link href={`/admin/dashboard/module-management/${course._id}`}>
-                  <button
-                    className="mt-auto bg-green-500 text-white font-poppins font-semibold py-2 px-4 rounded-lg transition duration-300 w-full"
-                  >
+                  <button className="mt-auto bg-green-500 text-white font-poppins font-semibold py-2 px-4 rounded-lg transition duration-300 w-full">
                     Manage
                   </button>
                 </Link>

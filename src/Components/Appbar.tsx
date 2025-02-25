@@ -1,15 +1,49 @@
 "use client";
-import { logoutUser } from "@/utls";
-import useCurrentUser from "@/utls/UsecurrentUser";
+import { clearCookies } from "@/utls";
+import { useCurrentUser, useSignUpUser } from "@/utls/UsecurrentUser";
+import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AppBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { currentUser, loading } = useCurrentUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const router = useRouter();
+  const userEmail = user?.emailAddresses[0].emailAddress;
+
+  // Fetch current user data
+  const {
+    data: currentUser,
+    // isLoading,
+    // refetch,
+  } = useCurrentUser(userEmail || "");
+  // if (user) {
+  //   refetch();
+  // }
+  // Sign up a new user
+  const { mutate: signUpUser } = useSignUpUser();
+  useEffect(() => {
+    if (!user) return;
+
+    const newUser = {
+      name: user.username || "",
+      email: user.emailAddresses[0].emailAddress || "",
+    };
+
+    // Trigger sign-up mutation
+    signUpUser(newUser, {
+      onSuccess: (data) => {
+        console.log("User signed up:", data);
+      },
+      onError: (error) => {
+        console.error("Sign-up error:", error);
+      },
+    });
+  }, [user, signUpUser]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -19,8 +53,10 @@ export default function AppBar() {
   };
 
   const handleLogout = () => {
-    logoutUser();
-    router.push('/')
+    signOut();
+    router.push("/");
+    clearCookies();
+    setDropdownOpen(false);
   };
 
   return (
@@ -78,30 +114,28 @@ export default function AppBar() {
             <Link href="#about" className="hover:text-gray-200 transition">
               About
             </Link>
-            {loading ? (
-              <span>Loading...</span>
-            ) : currentUser ? (
+            {user ? (
               <div className="relative">
                 {/* Profile Avatar */}
                 <div
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-green-500 text-white font-semibold cursor-pointer shadow-md hover:bg-green-600 transition"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-green-500 text-white font-semibold uppercase cursor-pointer shadow-md hover:bg-green-600 transition"
                 >
-                  {currentUser.name.slice(0, 1).toUpperCase()}
+                  {user?.username?.slice(0, 1)}
                 </div>
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                     <p className="px-4 py-2 text-gray-700 font-semibold">
-                      {currentUser.name}
+                      {user?.emailAddresses[0].emailAddress}
                     </p>
                     <p className="px-4 text-sm text-gray-500">
-                      {currentUser.email}
+                      {user?.username}
                     </p>
                     <hr className="my-1" />
 
-                    {currentUser.role === "admin" && (
+                    {currentUser?.role === "admin" && (
                       <Link
                         href="admin/dashboard"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
@@ -120,7 +154,7 @@ export default function AppBar() {
                 )}
               </div>
             ) : (
-              <Link href="/login" className="text-white transition">
+              <Link href="/sign-in" className="text-white transition">
                 Login
               </Link>
             )}
@@ -194,7 +228,7 @@ export default function AppBar() {
               </>
             ) : (
               <Link
-                href="/login"
+                href="/sign-in"
                 className="block text-white text-center hover:bg-gray-700 transition"
                 onClick={closeMenu}
               >

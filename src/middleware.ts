@@ -1,21 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+const isProtectedRoute = createRouteMatcher(["/course(.*)", "/admin(.*)"]);
 
-export function middleware(req: NextRequest) {
-  const token = req.cookies.get("accessToken")?.value;
-
-  console.log(token)
-  const requestedPath = req.nextUrl.pathname; // Get the current requested path
-  if (!token) {
-    // Redirect to login with callbackUrl to store where the user wanted to go
-    const loginUrl = new URL("/login", req.nextUrl.origin);
-    loginUrl.searchParams.set("callbackUrl", requestedPath);
-    return NextResponse.redirect(loginUrl);
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    await auth.protect();
   }
-
-  // Allow the user to access the requested page if they have a token
-  return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: ["/course/:path*",],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
