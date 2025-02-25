@@ -1,9 +1,8 @@
 "use client";
-
-import useCurrentUser from "@/utls/UsecurrentUser";
+import { useCurrentUser } from "@/utls/UsecurrentUser";
+import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useState } from "react";
-
 const CourseUpload = () => {
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<string>("");
@@ -11,7 +10,13 @@ const CourseUpload = () => {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const { currentUser } = useCurrentUser();
+  const { user } = useUser();
+  const userEmail = user?.emailAddresses[0].emailAddress;
+  const {
+    data: currentUser,
+    // isLoading,
+    // refetch,
+  } = useCurrentUser(userEmail || "");
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
