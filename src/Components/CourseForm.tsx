@@ -1,5 +1,5 @@
 "use client";
-import { useCurrentUser } from "@/utls/UsecurrentUser";
+import useCurrentUser from "@/utls/UsecurrentUser";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useState } from "react";
