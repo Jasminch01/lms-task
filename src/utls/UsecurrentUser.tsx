@@ -4,7 +4,7 @@ import axios from "axios";
 
 const fetchCurrentUser = async (userEmail: string): Promise<Tuser> => {
   const res = await axios.get<Tuser>(
-    `http://localhost:5000/api/user/me?email=${userEmail}`,
+    `https://lms-task-server.onrender.com/api/user/me?email=${userEmail}`,
     {
       withCredentials: true,
     }

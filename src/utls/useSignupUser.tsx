@@ -8,7 +8,7 @@ interface SignUpUserData {
 
 const signUpUser = async (userData: SignUpUserData): Promise<Tuser> => {
   const res = await axios.post<Tuser>(
-    'http://localhost:5000/api/user/signup',
+    'https://lms-task-server.onrender.com/api/user/signup',
     userData,
     { withCredentials: true }
   );
