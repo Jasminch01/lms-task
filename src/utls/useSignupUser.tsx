@@ -12,7 +12,7 @@ const signUpUser = async (userData: SignUpUserData): Promise<Tuser> => {
     userData,
     { withCredentials: true }
   );
-  return res.data; // Return the user data
+  return res.data.data; // Return the user data
 };
 
 export const useSignUpUser = () => {

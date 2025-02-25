@@ -22,7 +22,7 @@ const Course = ({ course }: TcourseProps) => {
     // refetch,
   } = useCurrentUser(userEmail || "");
   const editRef = useRef<HTMLDivElement>(null); // Ref for the editable area
-
+console.log(currentUser)
   // Handle clicks outside the editable area
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

@@ -25,6 +25,8 @@ export default function AppBar() {
   //   refetch();
   // }
   // Sign up a new user
+
+  console.log(currentUser)
   const { mutate: signUpUser } = useSignUpUser();
   useEffect(() => {
     if (!user) return;

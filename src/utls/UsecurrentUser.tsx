@@ -9,7 +9,7 @@ const fetchCurrentUser = async (userEmail: string): Promise<Tuser> => {
       withCredentials: true,
     }
   );
-  return res.data; // Return the user data
+  return res.data.data; // Return the user data
 };
 
 const useCurrentUser = (userEmail: string) => {

@@ -7,6 +7,7 @@ export type Tcourse = {
 };
 
 export type Tuser = {
+  data: Tuser | PromiseLike<Tuser>;
   _id: string;
   name: string;
   email: string;
