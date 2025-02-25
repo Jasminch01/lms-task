@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("accessToken")?.value;
+
+  console.log(token)
   const requestedPath = req.nextUrl.pathname; // Get the current requested path
   if (!token) {
     // Redirect to login with callbackUrl to store where the user wanted to go
