@@ -7,20 +7,31 @@ export const clearCookies = async () => {
   cookieStore.delete("accessToken");
 };
 
-export const getCurrentUser = async () => {
-  const cookeieStore = await cookies();
-  const token = cookeieStore.get("accessToken")
+import axios from "axios";
 
-  // let decodedToken = null;
+// Define the type for the user data
+export type Tuser = {
+  data: Tuser | PromiseLike<Tuser>;
+  id: string;
+  email: string;
+  role: string;
+  // Add other fields as needed
+};
 
-  // if (accessToken) {
-  //   decodedToken = await jwtDecode(accessToken);
+// Fetch the current user from the server
+export const fetchCurrentUser = async (userEmail: string): Promise<Tuser> => {
+  try {
+    const res = await axios.get<Tuser>(
+      `https://lms-task-server.onrender.com/api/user/me?email=${userEmail}`,
+      {
+        withCredentials: true,
+      }
+    );
 
-  //   return {
-  //     email: decodedToken.email,
-  //     role: decodedToken.role,
-  //   };
-  // }
-
-  return token;
+    // Return the user data 
+    return res.data.data;
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+    throw new Error("Failed to fetch user data");
+  }
 };

@@ -120,18 +120,18 @@ export default function AppBar() {
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                     <p className="px-4 py-2 text-gray-700 font-semibold">
-                      {user?.emailAddresses[0].emailAddress}
+                      {user?.username}
                     </p>
                     <p className="px-4 text-sm text-gray-500">
-                      {user?.username}
+                      {user?.emailAddresses[0].emailAddress}
                     </p>
                     <hr className="my-1" />
 
                     {currentUser?.role === "admin" && (
                       <Link
-                        href="admin/dashboard"
+                        href="/admin/dashboard"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
                       >
                         Dashboard
