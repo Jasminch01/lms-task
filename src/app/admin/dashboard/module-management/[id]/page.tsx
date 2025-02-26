@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import EditLectureModal from "@/Components/Admin/EditLectureModal";
 import LectureForm from "@/Components/Admin/LectureFrom";
@@ -7,6 +8,7 @@ import { Tcourse, Tlecture, Tmodule } from "@/types/type";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { MdFilterListAlt } from "react-icons/md";
 
 const ModuleLectureManagement = () => {
@@ -21,11 +23,9 @@ const ModuleLectureManagement = () => {
   const [pdfFiles, setPdfFiles] = useState<FileList | null>(null);
   const [pdfUrls, setPdfUrls] = useState<string[]>([]);
   const [editingLecture, setEditingLecture] = useState<Tlecture | null>(null);
-  console.log(lectures);
   // Filter state
   const [filterCourseId, setFilterCourseId] = useState<string>(""); // Selected course for filtering
   const [filterModuleId, setFilterModuleId] = useState<string>(""); // Selected module for filtering
-
   const { id } = useParams();
   const courseId = Array.isArray(id) ? id[0] : id;
 
@@ -134,35 +134,38 @@ const ModuleLectureManagement = () => {
     e.preventDefault();
 
     if (!selectedModule || !lectureTitle || !videoUrl) {
-      alert("Please fill in all required fields!");
+      toast.error("Please fill in all required fields!");
       return;
     }
 
     try {
+      let urls: string[] = [];
       if (pdfFiles) {
-        const urls = await uploadImageToCloudinary(pdfFiles);
+        urls = await uploadImageToCloudinary(pdfFiles);
         setPdfUrls(urls);
+      }
 
-        const lectureData = {
-          moduleId: selectedModule,
-          title: lectureTitle,
-          videoUrl,
-          pdfNotes: urls,
-        };
+      const lectureData = {
+        moduleId: selectedModule,
+        title: lectureTitle,
+        videoUrl,
+        pdfNotes: urls,
+      };
 
-        const res = await axios.post(
-          "https://lms-task-server.onrender.com/api/lectures/create",
-          lectureData,
-          { withCredentials: true }
-        );
+      console.log(lectureData);
 
-        if (res.data.data) {
-          setSelectedModule("");
-          setLectureTitle("");
-          setVideoUrl("");
-          setPdfFiles(null);
-          alert("Lecture added successfully");
-        }
+      const res = await axios.post(
+        "https://lms-task-server.onrender.com/api/lectures/create",
+        lectureData,
+        { withCredentials: true }
+      );
+      console.log(res.data.data);
+      if (res.data.data) {
+        toast.success("Lecture added successfully");
+        setSelectedModule("");
+        setLectureTitle("");
+        setVideoUrl("");
+        setPdfFiles(null);
       }
     } catch (error) {
       console.log(error);
@@ -202,7 +205,7 @@ const ModuleLectureManagement = () => {
       );
       if (res.data.data) {
         setLectures(lectures.filter((lec) => lec._id !== lectureId));
-        alert("Lecture deleted successfully");
+        toast.success("Lecture deleted successfully");
       }
     } catch (error) {
       console.log(error);
@@ -245,7 +248,7 @@ const ModuleLectureManagement = () => {
         setLectureTitle("");
         setVideoUrl("");
         setPdfUrls([]);
-        alert("Lecture updated successfully");
+        toast.success("Lecture updated successfully");
       }
     } catch (error) {
       console.log(error);
@@ -254,6 +257,7 @@ const ModuleLectureManagement = () => {
 
   return (
     <div className="p-4 md:p-8 bg-gray-100 min-h-screen">
+      <Toaster />
       <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">
         Module & Lecture Management
       </h1>

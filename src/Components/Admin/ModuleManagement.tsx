@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Tmodule } from "@/types/type";
+import toast from "react-hot-toast";
 
 interface ModuleManagementProps {
   courseId: string | undefined;
@@ -26,8 +27,11 @@ const ModuleManagement = ({
         { courseId, title: moduleTitle },
         { withCredentials: true }
       );
-      setModules([...modules, res.data.data]);
-      setModuleTitle("");
+      if (res.data.data) {
+        setModules([...modules, res.data.data]);
+        toast.success("Added a new module");
+        setModuleTitle("");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -49,10 +53,15 @@ const ModuleManagement = ({
         { editedTitle },
         { withCredentials: true }
       );
-      setModules(
-        modules.map((mod) => (mod._id === editedModuleId ? res.data.data : mod))
-      );
-      setEditMode(false);
+      if (res.data.data) {
+        setModules(
+          modules.map((mod) =>
+            mod._id === editedModuleId ? res.data.data : mod
+          )
+        );
+        toast.success("module updated successfully");
+        setEditMode(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -60,13 +69,16 @@ const ModuleManagement = ({
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `https://lms-task-server.onrender.com/api/modules/${selectedModule}`,
         {
           withCredentials: true,
         }
       );
-      setModules(modules.filter((mod) => mod._id !== selectedModule));
+      if (res.data.data) {
+        setModules(modules.filter((mod) => mod._id !== selectedModule));
+        toast.success("Module Deleted successfully");
+      }
     } catch (error) {
       console.log(error);
     }

@@ -16,10 +16,10 @@ const LectureTable = ({
       <div className="overflow-x-auto">
         <table className="w-full bg-white border rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="p-2">Title</th>
-              <th className="p-2">Video URL</th>
-              <th className="p-2">PDF Notes</th>
+            <tr className="bg-gray-200 ">
+              <th className="p-2 text-left">Title</th>
+              <th className="p-2 text-left">Video URL</th>
+              <th className="p-2 text-center">PDF Notes</th>
               <th className="p-2">Actions</th>
             </tr>
           </thead>
@@ -37,7 +37,7 @@ const LectureTable = ({
                     Watch Video
                   </a>
                 </td>
-                <td className="p-2">
+                <td className="p-2 text-center">
                   {lec.pdfNotes.map((pdf, pdfIndex) => (
                     <a
                       key={pdfIndex}
@@ -50,7 +50,7 @@ const LectureTable = ({
                     </a>
                   ))}
                 </td>
-                <td className="p-2 flex items-center gap-2 md:gap-5">
+                <td className="p-2 flex items-center justify-center gap-2 md:gap-5">
                   <button
                     className="bg-red-500 text-white px-2 py-1 rounded text-sm md:text-base"
                     onClick={() => handleDeleteLecture(lec._id)}
