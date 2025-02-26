@@ -12,8 +12,7 @@ const LectureTable = ({
   handleEditLecture,
 }: LectureTableProps) => {
   return (
-    <div className="mb-8 py-10">
-      <h2 className="text-xl font-bold mb-4">Lecture List</h2>
+    <div className="mb-8 pb-10 mt-5">
       <div className="overflow-x-auto">
         <table className="w-full bg-white border rounded-lg overflow-hidden">
           <thead>

@@ -264,9 +264,40 @@ const ModuleLectureManagement = () => {
           <p className="text-xl text-center font-bold">{course?.title}</p>
         </div>
 
+        <ModuleManagement
+          courseId={courseId}
+          modules={modules}
+          setModules={setModules}
+        />
+
+        <LectureForm
+          modules={modules}
+          selectedModule={selectedModule}
+          setSelectedModule={setSelectedModule}
+          handleSubmit={handleSubmit}
+          lectureTitle={lectureTitle}
+          setLectureTitle={setLectureTitle}
+          videoUrl={videoUrl}
+          setVideoUrl={setVideoUrl}
+          setPdfFiles={setPdfFiles}
+        />
+
+        <EditLectureModal
+          editingLecture={editingLecture}
+          setEditingLecture={setEditingLecture}
+          handleUpdateLecture={handleUpdateLecture}
+          lectureTitle={lectureTitle}
+          setLectureTitle={setLectureTitle}
+          videoUrl={videoUrl}
+          setVideoUrl={setVideoUrl}
+          setPdfFiles={setPdfFiles}
+        />
+      </div>
+      <div>
         {/* Filter Section */}
+        <h2 className="text-xl font-bold mb-4">All Lectures</h2>
         <form
-          className="mb-8 flex flex-col md:flex-row gap-4"
+          className="flex flex-col md:flex-row gap-4"
           onSubmit={(e) => {
             e.preventDefault();
             fetchFilteredLectures(filterCourseId, filterModuleId);
@@ -301,36 +332,6 @@ const ModuleLectureManagement = () => {
             <MdFilterListAlt className="text-2xl" />
           </button>
         </form>
-
-        <ModuleManagement
-          courseId={courseId}
-          modules={modules}
-          setModules={setModules}
-        />
-
-        <LectureForm
-          modules={modules}
-          selectedModule={selectedModule}
-          setSelectedModule={setSelectedModule}
-          handleSubmit={handleSubmit}
-          lectureTitle={lectureTitle}
-          setLectureTitle={setLectureTitle}
-          videoUrl={videoUrl}
-          setVideoUrl={setVideoUrl}
-          setPdfFiles={setPdfFiles}
-        />
-
-        <EditLectureModal
-          editingLecture={editingLecture}
-          setEditingLecture={setEditingLecture}
-          handleUpdateLecture={handleUpdateLecture}
-          lectureTitle={lectureTitle}
-          setLectureTitle={setLectureTitle}
-          videoUrl={videoUrl}
-          setVideoUrl={setVideoUrl}
-          setPdfFiles={setPdfFiles}
-        />
-
         <LectureTable
           lectures={lectures}
           handleDeleteLecture={handleDeleteLecture}
