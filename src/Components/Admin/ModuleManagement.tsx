@@ -23,7 +23,7 @@ const ModuleManagement = ({
   const handleAddModule = async () => {
     try {
       const res = await axios.post(
-        `https://lms-task-server.onrender.com/api/modules/create`,
+        `https://lms-task-server.vercel.app/api/modules/create`,
         { courseId, title: moduleTitle },
         { withCredentials: true }
       );
@@ -49,7 +49,7 @@ const ModuleManagement = ({
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `https://lms-task-server.onrender.com/api/modules/${editedModuleId}`,
+        `https://lms-task-server.vercel.app/api/modules/${editedModuleId}`,
         { editedTitle },
         { withCredentials: true }
       );
@@ -70,7 +70,7 @@ const ModuleManagement = ({
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `https://lms-task-server.onrender.com/api/modules/${selectedModule}`,
+        `https://lms-task-server.vercel.app/api/modules/${selectedModule}`,
         {
           withCredentials: true,
         }

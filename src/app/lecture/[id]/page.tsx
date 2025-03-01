@@ -24,7 +24,7 @@ const LecturePage = () => {
   useEffect(() => {
     const fetchModules = async () => {
       try {
-        const res = await axios.get(`https://lms-task-server.onrender.com/api/modules/${id}`, {
+        const res = await axios.get(`https://lms-task-server.vercel.app/api/modules/${id}`, {
           withCredentials: true,
         });
         const modulesWithDefaults = res.data.data.map(

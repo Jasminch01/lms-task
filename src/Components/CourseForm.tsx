@@ -58,7 +58,7 @@ const CourseUpload = () => {
 
       // Send course details to the server
       const response = await axios.post(
-        "https://lms-task-server.onrender.com/api/course/create",
+        "https://lms-task-server.vercel.app/api/course/create",
         {
           title,
           price,

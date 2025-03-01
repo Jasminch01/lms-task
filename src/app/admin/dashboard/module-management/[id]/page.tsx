@@ -33,7 +33,7 @@ const ModuleLectureManagement = () => {
   const fetchAllLectures = async () => {
     try {
       const res = await axios(
-        "https://lms-task-server.onrender.com/api/lectures",
+        "https://lms-task-server.vercel.app/api/lectures",
         { withCredentials: true }
       );
       setLectures(res.data.data);
@@ -46,7 +46,7 @@ const ModuleLectureManagement = () => {
   const fetchFilteredLectures = async (courseId: string, moduleId: string) => {
     try {
       const res = await axios.get(
-        `https://lms-task-server.onrender.com/api/lectures/filter?courseId=${courseId}&moduleId=${moduleId}`,
+        `https://lms-task-server.vercel.app/api/lectures/filter?courseId=${courseId}&moduleId=${moduleId}`,
         {
           withCredentials: true,
         }
@@ -61,7 +61,7 @@ const ModuleLectureManagement = () => {
   const fetchModules = async () => {
     try {
       const res = await axios.get(
-        `https://lms-task-server.onrender.com/api/modules/${courseId}`,
+        `https://lms-task-server.vercel.app/api/modules/${courseId}`,
         { withCredentials: true }
       );
       setModules(res.data.data);
@@ -74,7 +74,7 @@ const ModuleLectureManagement = () => {
   const fetchAllModules = async () => {
     try {
       const res = await axios.get(
-        `https://lms-task-server.onrender.com/api/modules`,
+        `https://lms-task-server.vercel.app/api/modules`,
         { withCredentials: true }
       );
       setAllModules(res.data.data);
@@ -87,7 +87,7 @@ const ModuleLectureManagement = () => {
   const fetchCourse = async () => {
     try {
       const res = await axios.get(
-        `https://lms-task-server.onrender.com/api/course?courseId=${courseId}`,
+        `https://lms-task-server.vercel.app/api/course?courseId=${courseId}`,
         { withCredentials: true }
       );
       setCourse(res.data.data);
@@ -100,7 +100,7 @@ const ModuleLectureManagement = () => {
   const fetchAllCourses = async () => {
     try {
       const res = await axios.get(
-        "https://lms-task-server.onrender.com/api/courses",
+        "https://lms-task-server.vercel.app/api/courses",
         { withCredentials: true }
       );
       setCourses(res.data.data);
@@ -155,7 +155,7 @@ const ModuleLectureManagement = () => {
       console.log(lectureData);
 
       const res = await axios.post(
-        "https://lms-task-server.onrender.com/api/lectures/create",
+        "https://lms-task-server.vercel.app/api/lectures/create",
         lectureData,
         { withCredentials: true }
       );
@@ -200,7 +200,7 @@ const ModuleLectureManagement = () => {
   const handleDeleteLecture = async (lectureId: string) => {
     try {
       const res = await axios.delete(
-        `https://lms-task-server.onrender.com/api/lectures?id=${lectureId}`,
+        `https://lms-task-server.vercel.app/api/lectures?id=${lectureId}`,
         { withCredentials: true }
       );
       if (res.data.data) {
@@ -232,7 +232,7 @@ const ModuleLectureManagement = () => {
 
     try {
       const res = await axios.put(
-        `https://lms-task-server.onrender.com/api/lectures?id=${editingLecture._id}`,
+        `https://lms-task-server.vercel.app/api/lectures?id=${editingLecture._id}`,
         updatedLectureData,
         { withCredentials: true }
       );

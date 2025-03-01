@@ -7,7 +7,7 @@ export default function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const courses = await axios.get("https://lms-task-server.onrender.com/api/courses", {
+        const courses = await axios.get("https://lms-task-server.vercel.app/api/courses", {
           withCredentials: true,
         });
         setcourses(courses.data.data);

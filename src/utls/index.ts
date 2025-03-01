@@ -22,7 +22,7 @@ export type Tuser = {
 export const fetchCurrentUser = async (userEmail: string): Promise<Tuser> => {
   try {
     const res = await axios.get<Tuser>(
-      `https://lms-task-server.onrender.com/api/user/me?email=${userEmail}`,
+      `https://lms-task-server.vercel.app/api/user/me?email=${userEmail}`,
       {
         withCredentials: true,
       }

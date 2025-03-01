@@ -44,7 +44,7 @@ const Course = ({ course }: TcourseProps) => {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `https://lms-task-server.onrender.com/api/courses?courseId=${course._id}`,
+        `https://lms-task-server.vercel.app/api/courses?courseId=${course._id}`,
         editedCourse,
         {
           withCredentials: true,
@@ -63,7 +63,7 @@ const Course = ({ course }: TcourseProps) => {
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `https://lms-task-server.onrender.com/api/courses?courseId=${course._id}`,
+        `https://lms-task-server.vercel.app/api/courses?courseId=${course._id}`,
         {
           withCredentials: true,
         }

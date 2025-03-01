@@ -16,7 +16,7 @@ const CourseDetailsPage = () => {
     const fetchCourse = async () => {
       try {
         const res = await axios.get(
-          `https://lms-task-server.onrender.com/api/course?courseId=${id}`,
+          `https://lms-task-server.vercel.app/api/course?courseId=${id}`,
           {
             withCredentials: true,
           }
